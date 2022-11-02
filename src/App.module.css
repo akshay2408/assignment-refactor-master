@@ -7,10 +7,32 @@
   align-items: center;
   justify-content: center;
   height: 80px;
+  max-width: 750px;
+  margin: auto;
 }
 
 .headerImage {
   height: 60px;
+}
+
+.bannerImageWrapper {
+  margin: 50px inherit;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 32px 0;
+  max-width: 750px;
+  margin: auto;
+}
+
+.bannerImage {
+  max-height: 15em;
+  display: block;
+}
+
+.listWrapper {
+  max-width: 750px;
+  margin: auto;
+  padding-bottom: 32px;
 }
 
 .main {
