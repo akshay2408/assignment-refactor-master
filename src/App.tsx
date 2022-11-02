@@ -11,6 +11,7 @@ import img2 from "./images/img2.png";
 import styles from "./App.module.css";
 import { ProductType } from "./types/ProductType";
 import Product from "./components/Product";
+import FormDataType from "./types/FormDataType";
 
 interface IFormData {
   title: string;
@@ -58,7 +59,7 @@ const App: React.FC<{}> = () => {
     - Number of favorites: ${numberOfFavourites()}`;
   }, [products, numberOfFavourites]);
 
-  const onSubmit = (payload: IFormData) => {
+  const onSubmit = (payload: FormDataType) => {
     const updated = lodash.clone(products);
     updated.unshift({
       title: payload.title,
@@ -79,7 +80,7 @@ const App: React.FC<{}> = () => {
     postPayload(payload);
   };
 
-  const postPayload = (payload: IFormData) => {
+  const postPayload = (payload: FormDataType) => {
     fetch("https://fakestoreapi.com/products", {
       method: "POST",
       body: JSON.stringify(payload),
@@ -141,7 +142,7 @@ const App: React.FC<{}> = () => {
           <div className={styles.modalClose} onClick={() => setOpen(false)}>
             <FaTimes />
           </div>
-          <Form on-submit={onSubmit} />
+          <Form onSubmit={onSubmit} />
         </div>
       </Modal>
     </React.Fragment>
