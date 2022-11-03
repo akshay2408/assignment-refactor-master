@@ -7,10 +7,10 @@ import styles from "./product.module.css";
 interface IProps {
   index: number;
   product: ProductType;
-  onFav: (title: string) => void;
+  onClickfavourite: (index: number) => void;
 }
 
-const Product: React.FC<IProps> = ({ product, onFav }) => {
+const Product: React.FC<IProps> = ({ product, onClickfavourite, index }) => {
   const {
     actionBar,
     productClass,
@@ -42,7 +42,7 @@ const Product: React.FC<IProps> = ({ product, onFav }) => {
         <span
           className={`${actionBarItem} ${product.isFavorite ? "active" : ""}`}
           role="button"
-          onClick={() => onFav(product.title)}
+          onClick={() => onClickfavourite(index)}
         >
           <FaStar />
           <span className={actionBarItemLabel}>

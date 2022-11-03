@@ -12,12 +12,7 @@ import styles from "./App.module.css";
 import { ProductType } from "./types/ProductType";
 import Product from "./components/Product";
 import FormDataType from "./types/FormDataType";
-
-interface IFormData {
-  title: string;
-  description: string;
-  price: string;
-}
+import { fetchProduct, postPayload } from "./Api/Api";
 
 const App: React.FC<{}> = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -27,24 +22,15 @@ const App: React.FC<{}> = () => {
 
   useEffect(() => {
     document.title = "Droppe refactor app";
-
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((products) => setProducts(products));
+    
+    fetchProduct((data) => setProducts(data));
   }, []);
 
-  const favClick = useCallback(
-    (title: string) => {
-      const productClone = [...products];
-      const idx = lodash.findIndex(productClone, { title });
-
-      if (productClone[idx].isFavorite) {
-        productClone[idx].isFavorite = false;
-      } else {
-        productClone[idx].isFavorite = true;
-      }
-
-      setProducts(productClone);
+  const onClickfavourite = useCallback(
+    (index: number) => {
+      const productsClone = [...products];
+      productsClone[index].isFavorite = !productsClone[index].isFavorite;
+      setProducts(productsClone);
     },
     [products]
   );
@@ -59,8 +45,9 @@ const App: React.FC<{}> = () => {
     - Number of favorites: ${numberOfFavourites()}`;
   }, [products, numberOfFavourites]);
 
-  const onSubmit = (payload: FormDataType) => {
+  const onSubmit = useCallback((payload: FormDataType) => {
     const updated = lodash.clone(products);
+
     updated.unshift({
       title: payload.title,
       description: payload.description,
@@ -77,32 +64,55 @@ const App: React.FC<{}> = () => {
     setIsShowingMessage(true);
     setMessage("Adding Product...");
 
-    postPayload(payload);
-  };
-
-  const postPayload = (payload: FormDataType) => {
-    fetch("https://fakestoreapi.com/products", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setTimeout(() => {
-          setIsShowingMessage(false);
-          setMessage("");
-        }, 2000);
-      });
-  };
+    // Api with callback function
+    postPayload(payload, () => {
+      setIsShowingMessage(false);
+      setMessage("");
+    });
+  }, [products]);
 
   const renderProducts = useMemo(() => {
     if (products && products.length) {
       return products.map((product, index) => (
-        <Product key={index} index={index} product={product} onFav={favClick} />
+        <Product
+          key={index}
+          index={index}
+          product={product}
+          onClickfavourite={onClickfavourite}
+        />
       ));
     } else {
       return <></>;
     }
-  }, [products, favClick]);
+  }, [products, onClickfavourite]);
+
+  const renderMessage = useMemo(
+    () =>
+      isShowingMessage && (
+        <div className={styles.messageContainer}>
+          <i>{message}</i>
+        </div>
+      ),
+    [isShowingMessage, message]
+  );
+
+  const renderModal = useMemo(
+    () => (
+      <Modal
+        isOpen={isOpen}
+        className={styles.reactModalContent}
+        overlayClassName={styles.reactModalOverlay}
+      >
+        <div className={styles.modalContentHelper}>
+          <div className={styles.modalClose} onClick={() => setOpen(false)}>
+            <FaTimes />
+          </div>
+          <Form onSubmit={onSubmit} />
+        </div>
+      </Modal>
+    ),
+    [isOpen, onSubmit]
+  );
 
   return (
     <React.Fragment>
@@ -121,30 +131,14 @@ const App: React.FC<{}> = () => {
           <span role="button">
             <Button onClick={() => setOpen(true)}>Send product proposal</Button>
           </span>
-          {isShowingMessage && (
-            <div className={styles.messageContainer}>
-              <i>{message}</i>
-            </div>
-          )}
         </div>
-
+        {renderMessage}
         <div className={styles.statsContainer}>
           <span>{productsStates}</span>
         </div>
         {renderProducts}
       </div>
-      <Modal
-        isOpen={isOpen}
-        className={styles.reactModalContent}
-        overlayClassName={styles.reactModalOverlay}
-      >
-        <div className={styles.modalContentHelper}>
-          <div className={styles.modalClose} onClick={() => setOpen(false)}>
-            <FaTimes />
-          </div>
-          <Form onSubmit={onSubmit} />
-        </div>
-      </Modal>
+        {renderModal}
     </React.Fragment>
   );
 };
