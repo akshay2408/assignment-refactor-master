@@ -20,7 +20,7 @@ const App: React.FC<{}> = () => {
 
   useEffect(() => {
     document.title = "Droppe refactor app";
-    
+
     fetchProduct((data) => setProducts(data));
   }, []);
 
@@ -38,32 +38,42 @@ const App: React.FC<{}> = () => {
     [products]
   );
 
-  const productsStates = useMemo(() => {
-    return `Total products: ${products.length}
-    - Number of favorites: ${numberOfFavourites()}`;
-  }, [products, numberOfFavourites]);
+  const productsStates = useMemo(
+    () => (
+      <span>
+        Total products :{" "}
+        <span data-testid="totalProducts">{products.length}</span> - Number of
+        favorites:{" "}
+        <span data-testid="numberOfFavourites">{numberOfFavourites()}</span>
+      </span>
+    ),
+    [products, numberOfFavourites]
+  );
 
-  const onSubmit = useCallback((payload: FormDataType) => {
-    const updated = lodash.clone(products);
+  const onSubmit = useCallback(
+    (payload: FormDataType) => {
+      const updated = lodash.clone(products);
 
-    updated.unshift({
-      title: payload.title,
-      description: payload.description,
-      price: Number(payload.price),
-      ...defaultProduct
-    });
+      updated.unshift({
+        title: payload.title,
+        description: payload.description,
+        price: Number(payload.price),
+        ...defaultProduct,
+      });
 
-    setProducts(updated);
-    setOpen(false);
-    setIsShowingMessage(true);
-    setMessage("Adding Product...");
+      setProducts(updated);
+      setOpen(false);
+      setIsShowingMessage(true);
+      setMessage("Adding Product...");
 
-    // Api with callback function
-    postPayload(payload, () => {
-      setIsShowingMessage(false);
-      setMessage("");
-    });
-  }, [products]);
+      // Api with callback function
+      postPayload(payload, () => {
+        setIsShowingMessage(false);
+        setMessage("");
+      });
+    },
+    [products]
+  );
 
   const renderProducts = useMemo(() => {
     if (products && products.length) {
@@ -112,17 +122,29 @@ const App: React.FC<{}> = () => {
     <React.Fragment>
       <div className={styles.header}>
         <div className={styles.headerImageWrapper}>
-          <img alt="logo" src="images/droppe-logo.png" className={styles.headerImage} />
+          <img
+            alt="logo"
+            src="images/droppe-logo.png"
+            className={styles.headerImage}
+          />
         </div>
       </div>
       <span className={styles.bannerImageWrapper}>
-        <img alt="banner" src="images/img1.png" className={styles.bannerImage} />
-        <img alt="banner" src="images/img2.png" className={styles.bannerImage} />
+        <img
+          alt="banner"
+          src="images/img1.png"
+          className={styles.bannerImage}
+        />
+        <img
+          alt="banner"
+          src="images/img2.png"
+          className={styles.bannerImage}
+        />
       </span>
 
       <div className={styles.listWrapper}>
         <div className={styles.buttonWrapper}>
-          <span role="button">
+          <span data-testid="addProductBtn" role="button">
             <Button onClick={() => setOpen(true)}>Send product proposal</Button>
           </span>
         </div>
@@ -132,7 +154,7 @@ const App: React.FC<{}> = () => {
         </div>
         {renderProducts}
       </div>
-        {renderModal}
+      {renderModal}
     </React.Fragment>
   );
 };

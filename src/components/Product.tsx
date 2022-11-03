@@ -21,7 +21,7 @@ const Product: React.FC<IProps> = ({ product, onClickfavourite, index }) => {
   } = styles;
 
   return (
-    <span className={productClass}>
+    <div data-testid="product"  className={productClass}>
       <span className={productTitle}>{product.title}</span>
       <p>
         <strong>
@@ -38,7 +38,7 @@ const Product: React.FC<IProps> = ({ product, onClickfavourite, index }) => {
         <br />
         {product.description}
       </p>
-      <span className={actionBar}>
+      <div className={actionBar}>
         <span
           className={`${actionBarItem} ${product.isFavorite ? "active" : ""}`}
           role="button"
@@ -49,8 +49,8 @@ const Product: React.FC<IProps> = ({ product, onClickfavourite, index }) => {
             {product.isFavorite ? "Remove from favorites" : "Add to favorites"}
           </span>
         </span>
-      </span>
-    </span>
+      </div>
+    </div>
   );
 };
 
