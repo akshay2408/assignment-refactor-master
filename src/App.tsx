@@ -5,14 +5,12 @@ import { FaTimes } from "react-icons/fa";
 
 import { Button } from "./components/button";
 import { Form } from "./components/form";
-import logo from "./images/droppe-logo.png";
-import img1 from "./images/img1.png";
-import img2 from "./images/img2.png";
 import styles from "./App.module.css";
 import { ProductType } from "./types/ProductType";
 import Product from "./components/Product";
 import FormDataType from "./types/FormDataType";
 import { fetchProduct, postPayload } from "./Api/Api";
+import { defaultProduct } from "./utils/Helper";
 
 const App: React.FC<{}> = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -52,11 +50,7 @@ const App: React.FC<{}> = () => {
       title: payload.title,
       description: payload.description,
       price: Number(payload.price),
-      isFavorite: false,
-      rating: {
-        rate: 0,
-        count: 0,
-      },
+      ...defaultProduct
     });
 
     setProducts(updated);
@@ -118,12 +112,12 @@ const App: React.FC<{}> = () => {
     <React.Fragment>
       <div className={styles.header}>
         <div className={styles.headerImageWrapper}>
-          <img alt="logo" src={logo} className={styles.headerImage} />
+          <img alt="logo" src="images/droppe-logo.png" className={styles.headerImage} />
         </div>
       </div>
       <span className={styles.bannerImageWrapper}>
-        <img alt="banner" src={img1} className={styles.bannerImage} />
-        <img alt="banner" src={img2} className={styles.bannerImage} />
+        <img alt="banner" src="images/img1.png" className={styles.bannerImage} />
+        <img alt="banner" src="images/img2.png" className={styles.bannerImage} />
       </span>
 
       <div className={styles.listWrapper}>
