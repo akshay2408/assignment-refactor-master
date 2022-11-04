@@ -3,8 +3,8 @@ import lodash from "lodash";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
 
-import { Button } from "./components/button";
-import { Form } from "./components/form";
+import { Button } from "./components/Button";
+import { Form } from "./components/Form";
 import styles from "./App.module.css";
 import { ProductType } from "./types/ProductType";
 import Product from "./components/Product";
@@ -145,7 +145,7 @@ const App: React.FC<{}> = () => {
 
       <div className={styles.listWrapper}>
         <div className={styles.buttonWrapper}>
-          <span  role="button">
+          <span role="button">
             <Button testId="addProductBtn" onClick={() => setOpen(true)}>Send product proposal</Button>
           </span>
         </div>
