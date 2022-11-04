@@ -103,6 +103,7 @@ const App: React.FC<{}> = () => {
   const renderModal = useMemo(
     () => (
       <Modal
+        data-testid="addProductModal"
         isOpen={isOpen}
         className={styles.reactModalContent}
         overlayClassName={styles.reactModalOverlay}
@@ -144,8 +145,8 @@ const App: React.FC<{}> = () => {
 
       <div className={styles.listWrapper}>
         <div className={styles.buttonWrapper}>
-          <span data-testid="addProductBtn" role="button">
-            <Button onClick={() => setOpen(true)}>Send product proposal</Button>
+          <span  role="button">
+            <Button testId="addProductBtn" onClick={() => setOpen(true)}>Send product proposal</Button>
           </span>
         </div>
         {renderMessage}

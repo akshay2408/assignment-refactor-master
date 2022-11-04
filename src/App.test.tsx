@@ -1,5 +1,6 @@
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import ReactModal from "react-modal";
+import { render, waitFor, fireEvent } from "@testing-library/react";
 
 import App from "./App";
 
@@ -35,6 +36,37 @@ describe("App Testing", () => {
     expect(numberOfFavourites.textContent).toBe("0");
 
   });
+
+  it("is adding product", async () => {
+    const { container, getByTestId, getByText } = render(<App />);
+    ReactModal.setAppElement(container);
+
+    const addProductBtn = await getByTestId('addProductBtn');
+    
+    expect(addProductBtn).toBeInTheDocument();
+    addProductBtn.click();
+    waitFor(() =>  expect(getByTestId('addProductModal')).toBeInTheDocument());
+
+    const titleInput = getByTestId('titleInput');
+    const priceInput = getByTestId('priceInput');
+    const descriptionInput = getByTestId('descriptionInput');
+    const submitButton = getByTestId('submitProduct');
+
+    expect(titleInput).toBeInTheDocument();
+    fireEvent.change(titleInput, { target: { value: "Test Product" }});
+
+    expect(priceInput).toBeInTheDocument();
+    fireEvent.change(priceInput, { target: { value: "100" }});
+    
+    expect(descriptionInput).toBeInTheDocument();
+    fireEvent.change(descriptionInput, { target: { value: "Description" }});
+
+    expect(submitButton).toBeInTheDocument();
+    fireEvent.click(submitButton);
+
+    expect(getByText('Test Product')).toBeInTheDocument();
+  });
+
 
 
 });

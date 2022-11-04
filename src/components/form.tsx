@@ -46,10 +46,12 @@ export const Form: React.FC<IFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form className={styles.form} onSubmit={(event) => handleSubmit(event)}>
+    <form 
+      className={styles.form} onSubmit={(event) => handleSubmit(event)}>
       <span className={styles.label}>Product title: *</span>
 
       <input
+        data-testid="titleInput"
         placeholder="Title..."
         value={formData.title}
         name={"title"}
@@ -60,6 +62,7 @@ export const Form: React.FC<IFormProps> = ({ onSubmit }) => {
       <span className={styles.label}>Product details: *</span>
 
       <input
+        data-testid="priceInput"
         placeholder="Price..."
         type="number"
         value={formData.price}
@@ -69,6 +72,7 @@ export const Form: React.FC<IFormProps> = ({ onSubmit }) => {
       />
 
       <textarea
+        data-testid="descriptionInput"
         placeholder="Start typing product description here..."
         value={formData.description}
         name="description"
@@ -76,7 +80,7 @@ export const Form: React.FC<IFormProps> = ({ onSubmit }) => {
         className={styles.textarea}
       />
 
-      <Button>Add a product</Button>
+      <Button testId="submitProduct">Add a product</Button>
     </form>
   );
 };
